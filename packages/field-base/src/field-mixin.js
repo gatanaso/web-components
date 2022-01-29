@@ -38,7 +38,8 @@ export const FieldMixin = (superclass) =>
          * @attr {string} error-message
          */
         errorMessage: {
-          type: String
+          type: String,
+          attribute: 'error-message'
         },
 
         /**
@@ -47,6 +48,7 @@ export const FieldMixin = (superclass) =>
          */
         helperText: {
           type: String,
+          attribute: 'helper-text',
           observer: '_helperTextChanged'
         },
 
@@ -102,9 +104,6 @@ export const FieldMixin = (superclass) =>
       this._fieldAriaController = new FieldAriaController(this);
       this._helperController = new HelperController(this);
 
-      this.addController(this._fieldAriaController);
-      this.addController(this._helperController);
-
       this._labelController.addEventListener('label-changed', (event) => {
         const { hasLabel, node } = event.detail;
         this.__labelChanged(hasLabel, node);
@@ -119,6 +118,9 @@ export const FieldMixin = (superclass) =>
     /** @protected */
     ready() {
       super.ready();
+
+      this.addController(this._fieldAriaController);
+      this.addController(this._helperController);
 
       const error = this._errorNode;
       if (error) {
